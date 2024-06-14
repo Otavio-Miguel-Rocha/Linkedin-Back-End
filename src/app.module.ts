@@ -10,10 +10,13 @@ import { FileModule } from './file/file.module';
 import { File } from './file/entities/file.entity';
 import { ConnectionModule } from './connection/connection.module';
 import { Connection } from './connection/entities/connection.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
+      logging: true,
+      logger: 'advanced-console',
       type: 'mysql',
       host: 'localhost',
       port: 3306,
@@ -31,9 +34,10 @@ import { Connection } from './connection/entities/connection.entity';
     UserModule,
     PublicationModule,
     FileModule,
-    ConnectionModule
+    ConnectionModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

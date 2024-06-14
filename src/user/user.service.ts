@@ -6,7 +6,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { log } from 'console';
 import { Publication } from 'src/publication/entities/publication.entity';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
   
@@ -20,6 +20,7 @@ export class UserService {
       throw new HttpException("As senhas não coincidem!", HttpStatus.BAD_REQUEST);
     }
     try{
+      createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
       return await this.userRepository.save(createUserDto);
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
@@ -32,6 +33,12 @@ export class UserService {
     return await this.userRepository.findOne({
       where: { id },
       relations: ['publications'],
+    });
+  }
+
+  async findOneByEmail(email: string) : Promise<User>{
+    return await this.userRepository.findOne({
+      where: { email: email }
     });
   }
 

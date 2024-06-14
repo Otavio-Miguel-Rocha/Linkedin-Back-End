@@ -1,17 +1,18 @@
 import { User } from "src/user/entities/user.entity";
-import { Column, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { ConnectionStatus } from "../enum/connection-status.enum";
 
 @Entity()
 export class Connection {
-    @PrimaryColumn({type: "int"})
-    @ManyToOne(() => User, {nullable:false})
-    user2 : User;
+    @PrimaryGeneratedColumn("identity")
+    id: number;
 
-    @PrimaryColumn({type: "int", nullable:false})
-    @ManyToOne(() => User, {nullable:false})
-    userToConnect : User;
+    @ManyToOne(() => User, user => user.sentConnections, { nullable: false })
+    user1: User;
 
-    @Column({type: "enum", enumName: "ConnectionStatus" , nullable: false})
-    status : ConnectionStatus;
+    @ManyToOne(() => User, user => user.receivedConnections, { nullable: false })
+    user2: User;
+
+    @Column({ type: 'enum', enum: ConnectionStatus, default: ConnectionStatus.WAITING })
+    status: ConnectionStatus;
 }

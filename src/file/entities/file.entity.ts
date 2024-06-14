@@ -16,6 +16,6 @@ export class File {
     @Column({ length: 35})
     type: string
 
-    @ManyToOne(() => Publication, publication => publication.attachments)
+    @ManyToOne(() => Publication, publication => publication.attachments, {nullable: true})
     publication: Publication;
 }
